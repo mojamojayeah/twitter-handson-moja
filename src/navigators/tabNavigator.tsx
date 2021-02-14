@@ -24,6 +24,7 @@ const HomeStackNavigator = () => (
 
 const UserStackNavigator = () => {
   //Lesson1: アプリにログインログアウトを実装してみよう
+  const [user] = useAuthState(firebase.auth())
   return (
     <Stack.Navigator initialRouteName="Main">
       <Stack.Screen
@@ -33,6 +34,7 @@ const UserStackNavigator = () => {
           headerTitle: 'ユーザー',
           headerBackTitleVisible: false,
         }}
+        initialParams={{ uid: user?.uid }}
       />
     </Stack.Navigator>
   )
@@ -40,6 +42,7 @@ const UserStackNavigator = () => {
 
 const Tab = createBottomTabNavigator()
 
+// eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
 const TabNavigator = () => (
   <Tab.Navigator
     initialRouteName="HomeTab"

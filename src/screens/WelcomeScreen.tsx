@@ -5,14 +5,28 @@ import { signInGoogle } from '../services/auth/google'
 import { useAuthState } from 'react-firebase-hooks/auth'
 import firebase from '../repositories/firebase'
 
+// eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
 const WelcomeScreen = () => {
   const navigation = useNavigation()
 
   //Lesson1: アプリにログインログアウトを実装してみよう
-  const onPressSignInGoogle = useCallback(async () => {}, [])
+  const [user] = useAuthState(firebase.auth())
+
+  const onPressSignInGoogle = useCallback(async () => {
+    const { canceled, error } = await signInGoogle()
+    if (canceled) {
+      return alert('ログインをキャンセルしました')
+    }
+    if (error) {
+      return alert('ログインに失敗しました')
+    }
+  }, [])
 
   //Lesson1: アプリにログインログアウトを実装してみよう
-  useEffect(() => {}, [])
+  useEffect(() => {
+    if (!user || !user.uid) return
+    navigation.navigate('Main')
+  }, [user, navigation])
 
   return (
     <View style={styles.container}>
