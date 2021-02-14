@@ -9,3 +9,29 @@ type Result = {
 }
 
 //Lesson1: アプリにログインログアウトを実装してみよう
+export const signInGoogle = async (): Promise<Result> => {
+  try {
+    const authState = await AppAuth.authAsync({
+      issuer: 'http://accounts.google.com',
+      scopes: ['openid', 'profile'],
+      clientId:
+        // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+        Platform.OS === 'ios' ? process.env.GOOGLE_CLIENT_ID_FOR_IOS! : process.env.GOOGLE_CLIENT_ID_FOR_ANDROID!,
+    })
+    if (!authState.idToken) {
+      return { canceled: true }
+    }
+    const credential = firebase.auth.GoogleAuthProvider.credential(authState.idToken)
+
+    firebase
+      .auth()
+      .signInAndRetrieveDataWithCredential(credential)
+      .catch((error) => {
+        throw new Error(error)
+      })
+    return { success: true }
+  } catch (e) {
+    console.warn(e)
+    return { error: e }
+  }
+}
