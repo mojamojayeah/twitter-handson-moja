@@ -1,7 +1,7 @@
 {
   "main": "index.js",
   "scripts": {
-    "start": "expo start",
+    "start": "nodebrew use 14.15.3 && expo start",
     "dev": "expo start",
     "rn:android": "react-native run-android",
     "rn:ios": "react-native run-ios",
