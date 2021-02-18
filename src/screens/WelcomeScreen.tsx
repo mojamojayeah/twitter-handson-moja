@@ -1,31 +1,31 @@
 import React, { useCallback, useEffect } from 'react'
 import { useNavigation } from '@react-navigation/core'
-import { View, Text, StyleSheet, Image, TouchableOpacity } from 'react-native'
+import { AntDesign } from '@expo/vector-icons'
+import { View, Text, StyleSheet, TouchableOpacity } from 'react-native'
 import { signInGoogle } from '../services/auth/google'
 import { useAuthState } from 'react-firebase-hooks/auth'
 import firebase from '../repositories/firebase'
 
-// eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
 const WelcomeScreen = () => {
   const navigation = useNavigation()
-
-  //Lesson1: アプリにログインログアウトを実装してみよう
   const [user] = useAuthState(firebase.auth())
 
   const onPressSignInGoogle = useCallback(async () => {
     const { canceled, error } = await signInGoogle()
     if (canceled) {
-      return alert('ログインをキャンセルしました')
+      return alert('ログインに失敗しました')
     }
     if (error) {
-      return alert('ログインに失敗しました')
+      return alert('ログインをキャンセルしました')
     }
   }, [])
 
-  //Lesson1: アプリにログインログアウトを実装してみよう
   useEffect(() => {
     if (!user || !user.uid) return
-    navigation.navigate('Main')
+    navigation.reset({
+      index: 0,
+      routes: [{ name: 'Main' }],
+    })
   }, [user, navigation])
 
   return (
@@ -36,7 +36,9 @@ const WelcomeScreen = () => {
         </View>
         <View style={styles.ButonContainer}>
           <TouchableOpacity style={styles.signinButton} onPress={onPressSignInGoogle}>
-            <Image style={styles.googleIcon} resizeMode="contain" source={require('../../assets/google-logo.png')} />
+            <View style={styles.iconWrapper}>
+              <AntDesign name="google" size={24} color="black" />
+            </View>
             <Text style={styles.signinText}>Signin With Google</Text>
           </TouchableOpacity>
         </View>
@@ -113,8 +115,8 @@ const styles = StyleSheet.create({
     color: '#404040',
     fontSize: 18,
   },
-  googleIcon: {
-    height: 30,
+  iconWrapper: {
+    paddingRight: 12,
   },
   termTextWrapper: {
     paddingTop: 36,

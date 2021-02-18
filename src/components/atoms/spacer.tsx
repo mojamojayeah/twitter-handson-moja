@@ -27,7 +27,6 @@ const getSpaceSizeHandle = (size: SpaceSize) => {
   }
 }
 
-// eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
 const Spacer = ({ layout = 'horizontal', size = 'm', style, ...rest }: SpacerProps) => {
   return (
     <View
@@ -41,4 +40,5 @@ const Spacer = ({ layout = 'horizontal', size = 'm', style, ...rest }: SpacerPro
     />
   )
 }
+
 export default Spacer

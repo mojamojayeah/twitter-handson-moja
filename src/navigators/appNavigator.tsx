@@ -8,17 +8,17 @@ import firebase from '../repositories/firebase'
 
 const Stack = createStackNavigator()
 
-// eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
 const AppNavigator = () => {
   //Lesson1: アプリにログインログアウトを実装してみよう
   const [user, initilalising, error] = useAuthState(firebase.auth())
   if (initilalising) {
     return (
       <View>
-        <Text>initilalising...</Text>
+        <Text>initializing...</Text>
       </View>
     )
   }
+
   if (error) {
     return (
       <View>
@@ -26,6 +26,7 @@ const AppNavigator = () => {
       </View>
     )
   }
+
   return (
     <Stack.Navigator screenOptions={{ gestureEnabled: false }} headerMode="none">
       {

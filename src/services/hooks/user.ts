@@ -1,21 +1,35 @@
-import { useEffect, useState } from 'react'
-import { db } from '../repositories/firebase'
-import { useDocument } from 'react-firebase-hooks/firestore'
+import { useState, useEffect } from 'react'
+import { User, buildUser } from '../../entities/User'
+import { db } from '../../repositories/firebase'
 
-type User = {
-  uid: string
-  name: string
-}
-const usersRef = db.collection('users')
-
-export const useUser = (uid: string) => {
-  const [user, setUser] = useState<User>()
-  const userRef = usersRef.doc(uid)
-  //Lesson1: アプリにログインログアウトを実装してみよう
+export const useUser = (uid: string): [User | null, boolean, firebase.firestore.FirestoreError | null] => {
+  const [value, setValue] = useState<User | null>(null)
+  const [loading, setLoading] = useState<boolean>(true)
+  const [error, setError] = useState<firebase.firestore.FirestoreError | null>(null)
 
   useEffect(() => {
-    //Lesson1: アプリにログインログアウトを実装してみよう
-  }, [])
+    const targetRef = db.collection('users').doc(uid)
+    const unsubscribe = targetRef.onSnapshot({
+      next: (snapshot) => {
+        if (!snapshot.exists) {
+          setValue(null)
+          setLoading(false)
+          return
+        }
 
-  return { user }
+        const targetValue = buildUser(uid, snapshot.data())
+        setValue(targetValue)
+        setLoading(false)
+      },
+      error: (error) => {
+        setError(error)
+      },
+    })
+
+    return () => {
+      unsubscribe()
+    }
+  }, [uid])
+
+  return [value, loading, error]
 }
