@@ -1,21 +1,19 @@
 import React from 'react'
 import { TouchableOpacity, Text, TouchableOpacityProps, StyleSheet } from 'react-native'
 
-type OutlinesButtonProps = TouchableOpacityProps & {
+type OutlinedButtonProps = TouchableOpacityProps & {
   text?: string
-  fontSize: number
+  fontSize?: number
   color?: string // html color code
 }
 
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-//.FCはchildrenを使うときに使う
-const OutlinedButton: React.FC<OutlinesButtonProps> = ({
+const OutlinedButton: React.FC<OutlinedButtonProps> = ({
   text,
   fontSize = 12,
   color = '#1da1f2',
   style,
   children,
-  ...rest //TouchableOpacityPropsの残りのやつをまとめている。
+  ...rest
 }) => {
   return (
     <TouchableOpacity style={[styles.root, { borderColor: color }, style]} {...rest}>

@@ -29,7 +29,6 @@ const getAvatarSizeHandle = (size: AvatarSize) => {
   }
 }
 
-// eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
 const Avatar = ({ size = 'm', uri, style, ...rest }: AvatarProps) => {
   return (
     <View
@@ -54,4 +53,5 @@ const Avatar = ({ size = 'm', uri, style, ...rest }: AvatarProps) => {
     </View>
   )
 }
+
 export default Avatar
