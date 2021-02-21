@@ -1,3 +1,4 @@
+import { firestore } from 'firebase'
 import { db, storage } from './firebase'
 import { CreateTweet } from '../entities/Tweet'
 
@@ -9,7 +10,7 @@ const setTweetImage = async (uid: string, tweetID: string, fileName: string, blo
   const task = userStorageRef.child(`tweets/${tweetID}/${fileName}.png`).put(blob, { contentType: 'image/png' })
 
   return task
-    .then((sanpshop) => sanpshop.ref.getDownloadURL())
+    .then((snapshop) => snapshop.ref.getDownloadURL())
     .then((url: string) => {
       return url
     })
@@ -20,8 +21,8 @@ const setTweetImage = async (uid: string, tweetID: string, fileName: string, blo
 }
 
 const getTweetsRef = (uid: string) => {
-  const tweersRef = usersFirestoreRef.doc(uid).collection('tweets')
-  return tweersRef
+  const tweetsRef = usersFirestoreRef.doc(uid).collection('tweets')
+  return tweetsRef
 }
 
 export const createTweet = async (uid: string, data: CreateTweet) => {
@@ -42,6 +43,8 @@ export const createTweet = async (uid: string, data: CreateTweet) => {
     text: data.text,
     fileURLs,
     writer: data.writer,
+    createdAt: firestore.FieldValue.serverTimestamp(),
+    updatedAt: firestore.FieldValue.serverTimestamp(),
   })
   return { result: true }
 }
