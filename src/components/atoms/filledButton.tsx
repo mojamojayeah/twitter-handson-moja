@@ -27,10 +27,11 @@ const FilledButton: React.FC<FIlledButtonProps> = ({
 const styles = StyleSheet.create({
   root: {
     display: 'flex',
+    flexDirection: 'row',
     justifyContent: 'center',
     alignItems: 'center',
     borderRadius: 24,
-    paddingVertical: 12,
+    paddingVertical: 6,
     paddingHorizontal: 12,
   },
 })
