@@ -3,12 +3,13 @@ import { MaterialCommunityIcons, AntDesign } from '@expo/vector-icons'
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs'
 import { createStackNavigator } from '@react-navigation/stack'
 import { useAuthState } from 'react-firebase-hooks/auth'
-import firebase from '../repositories/firebase'
+import { auth } from '../repositories/firebase'
 import HomeScreen from '../screens/HomeScreen'
 import UserScreen from '../screens/UserScreen'
 import UpdateUserScreen from '../screens/UpdateUserScreen'
 import CreateTweetScreen from '../screens/CreateTweetScreen'
 import TweetScreen from '../screens/TweetScreen'
+import FollowListScreen from '../screens/FollowListScreen'
 
 const Stack = createStackNavigator()
 
@@ -59,11 +60,31 @@ const HomeStackNavigator = () => (
         headerTransparent: true,
       }}
     />
+    <Stack.Screen
+      name="UpdateUser"
+      component={UpdateUserScreen}
+      options={{
+        headerTitle: '変更',
+        headerBackTitleVisible: false,
+      }}
+    />
+    <Stack.Screen
+      name="FollowList"
+      component={FollowListScreen}
+      options={{
+        headerBackTitleVisible: false,
+        headerStyle: {
+          shadowColor: 'transparent',
+          shadowOpacity: 0,
+          elevation: 0,
+        },
+      }}
+    />
   </Stack.Navigator>
 )
 
 const UserStackNavigator = () => {
-  const [user] = useAuthState(firebase.auth())
+  const [user] = useAuthState(auth)
   return (
     <Stack.Navigator initialRouteName="Main">
       <Stack.Screen
@@ -77,6 +98,15 @@ const UserStackNavigator = () => {
         initialParams={{ uid: user?.uid }}
       />
       <Stack.Screen
+        name="User"
+        component={UserScreen}
+        options={{
+          headerTitle: null,
+          headerBackTitleVisible: false,
+          headerTransparent: true,
+        }}
+      />
+      <Stack.Screen
         name="UpdateUser"
         component={UpdateUserScreen}
         options={{
@@ -84,6 +114,18 @@ const UserStackNavigator = () => {
           headerBackTitleVisible: false,
         }}
         initialParams={{ uid: user?.uid }}
+      />
+      <Stack.Screen
+        name="FollowList"
+        component={FollowListScreen}
+        options={{
+          headerBackTitleVisible: false,
+          headerStyle: {
+            shadowColor: 'transparent',
+            shadowOpacity: 0,
+            elevation: 0,
+          },
+        }}
       />
     </Stack.Navigator>
   )

@@ -1,9 +1,9 @@
 import React, { useCallback, useLayoutEffect } from 'react'
 import { View, StyleSheet, ScrollView, TouchableOpacity } from 'react-native'
-import { useNavigation } from '@react-navigation/core'
+import { useNavigation, StackActions } from '@react-navigation/native'
 import { useAuthState } from 'react-firebase-hooks/auth'
 import { MaterialIcons } from '@expo/vector-icons'
-import firebase from '../repositories/firebase'
+import { auth } from '../repositories/firebase'
 import { useUser } from '../services/hooks/user'
 import { useTweets } from '../services/hooks/tweet'
 import Fab from '../components/atoms/fab'
@@ -13,24 +13,24 @@ import TweetCard from '../components/organisms/tweetCard'
 
 const HomeScreen = () => {
   const navigation = useNavigation()
-  const [firebaseUser] = useAuthState(firebase.auth())
+  const [firebaseUser] = useAuthState(auth)
   const [user] = useUser(firebaseUser.uid)
   const [tweets] = useTweets()
 
   const goToTweet = useCallback(
     (uid: string, tweetID: string) => {
-      navigation.navigate('Tweet', { uid, tweetID })
+      navigation.dispatch(StackActions.push('Tweet', { uid, tweetID }))
     },
     [navigation]
   )
 
   const goToCreateTweet = useCallback(() => {
-    navigation.navigate('CreateTweet')
+    navigation.dispatch(StackActions.push('CreateTweet'))
   }, [navigation])
 
   const goToUser = useCallback(
     (uid) => {
-      navigation.navigate('User', { uid })
+      navigation.dispatch(StackActions.push('User', { uid }))
     },
     [navigation]
   )
